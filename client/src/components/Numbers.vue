@@ -34,13 +34,14 @@
 
 <script>
 
-/* import axios from 'axios'; */
+import axios from 'axios';
 
 export default {
   data() {
     return {
       numbers: [],
       number: null,
+      result: [],
     };
   },
 
@@ -51,19 +52,30 @@ export default {
       if (Number.isNaN(num)) {
         window.alert('Insira um valor!');
       } else if (num < -1) {
-        console.log(typeof this.number);
         window.alert('Insira um valor positivo!');
       } else if (num === -1) {
         this.postNumbers();
       } else {
-        this.numbers.push(this.number);
+        this.numbers.push(num);
         this.number = null;
       }
       console.log(typeof num);
       console.log(this.numbers);
     },
     postNumbers() {
-      console.log('teste');
+      const path = 'http://localhost:5000/numbers';
+      const payload = {
+        numbers: this.numbers,
+      };
+      axios.post(path, payload)
+        .then((res) => {
+          this.result = res.data.numbers;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+      console.log(this.result);
     },
   },
   created() {
