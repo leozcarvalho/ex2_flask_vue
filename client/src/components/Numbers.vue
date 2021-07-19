@@ -79,6 +79,7 @@ export default {
       if (Number.isNaN(num)) {
         window.alert('Insira um valor!');
       } else if (num < -1) {
+        this.number = null;
         window.alert('Insira um valor positivo!');
       } else if (num === -1) {
         this.postNumbers();
