@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-2"></div>
-        <div class="col-8">
+        <div v-if = "finished === false" class="col-8">
             <h1>Insira os números desejados ou insira -1
             para sair e gerar seu resultado:</h1>
             <div class="my-5">
@@ -28,7 +28,29 @@
                     </div>
             </div>
         </div>
-        <div class="col-2"></div>
+         <div v-else class="col-8">
+            <h1 class="text-center">Resultado</h1>
+            <div class="mt-5">
+              <h2>Numeros inseridos: {{this.numbers}}</h2>
+              <h2>Ordem inversa: {{this.reverse}}</h2>
+              <h2>Soma: {{this.sum}}</h2>
+              <h2>Média: {{this.med}}</h2>
+              <h2>Valores superiores a média: {{this.upmed}}</h2>
+              <h2>Valores inferiores a 7: {{this.underseven}}</h2>
+              <div class="container mt-5">
+                <div class="row">
+                  <div class="col text-center">
+                    <button
+                      class="btn btn-primary btn-lg"
+                      @click="reset">REINICIAR
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div>
+        <div class="col-2">
+        </div>
     </div>
 </template>
 
@@ -42,13 +64,18 @@ export default {
       numbers: [],
       number: null,
       result: [],
+      reverse: [],
+      sum: 0,
+      med: 0,
+      upmed: 0,
+      underseven: 0,
+      finished: false,
     };
   },
 
   methods: {
     addNumber() {
-      const num = parseInt(this.number, 8);
-      console.log(num);
+      const num = parseInt(this.number, 10);
       if (Number.isNaN(num)) {
         window.alert('Insira um valor!');
       } else if (num < -1) {
@@ -59,8 +86,6 @@ export default {
         this.numbers.push(num);
         this.number = null;
       }
-      console.log(typeof num);
-      console.log(this.numbers);
     },
     postNumbers() {
       const path = 'http://localhost:5000/numbers';
@@ -69,13 +94,23 @@ export default {
       };
       axios.post(path, payload)
         .then((res) => {
-          this.result = res.data.numbers;
+          this.result = res.data;
+          this.reverse = res.data.reverse;
+          this.sum = res.data.sum;
+          this.med = res.data.med;
+          this.upmed = res.data.upmed;
+          this.underseven = res.data.underseven;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
         });
-      console.log(this.result);
+      this.finished = true;
+    },
+    reset() {
+      this.finished = false;
+      this.numbers = [];
+      this.number = null;
     },
   },
   created() {

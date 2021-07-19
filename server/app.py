@@ -38,7 +38,7 @@ def post_numbers():
 
     underValuesSeven = underSeven(numbers)
 
-    return jsonify(numbers, reverseNumbers, sumNumbers, medNumbers, upMedNumbers, underValuesSeven)
+    return jsonify({'numbers' : numbers,'reverse' : reverseNumbers, 'sum' : sumNumbers, 'med' : medNumbers, 'upmed' : upMedNumbers, 'underseven' : underValuesSeven})
 
 def reverseList(list):
     return list[::-1]
